@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+</head>
+<body>
+<div style="border: solid 1px">
+    <form enctype="multipart/form-data" method="post" th:action= "@{/user/test}">
+        图片<input type="file" name="file"/>
+        <input type="submit" value="上传"/>
+    </form>
+
+    <!--<from enctype="multipart/form-data" method="post" th:action="@{/user/addTime}" th:object="${Timeline}">-->
+            <!--<label>text</label>-->
+            <!--<textarea class="form-control" th:field="*{text}"></textarea>-->
+            <!--图片<input type="file" name="file"/>-->
+            <!--<input type="submit" value="上传"/>-->
+    <!--</from>-->
+</div>
+</body>
+</html>

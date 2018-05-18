@@ -1,0 +1,35 @@
+eureka:
+      client:
+        service-url:
+          defaultZone: http://localhost:8761/eureka/
+server:
+  port: 8763
+spring:
+  application:
+    name: service1
+  datasource:
+    url: jdbc:mysql://localhost/springcloud?characterEncoding=utf-8
+    username: root
+    password: ygy123
+    driver-class-name: com.mysql.jdbc.Driver
+  thymeleaf:
+    cache: false
+  redis:
+      database: 0
+      host: 127.0.0.1
+      port: 6379
+      password:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+      timeout: 600000
+  http:
+    multipart:
+      max-file-size: 10MB
+debug: true
+mybatis:
+  mapper-locations: classpath:mapping/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
