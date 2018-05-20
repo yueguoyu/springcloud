@@ -1,6 +1,7 @@
 package com.ygy.controller;
 
 import com.ygy.dao.OssclientUtilDao;
+import com.ygy.dao.RedisDao;
 import com.ygy.dao.TimelineDao;
 import com.ygy.mapper.TimelineMapper;
 import com.ygy.model.Timeline;
@@ -10,10 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/user")
@@ -39,6 +37,7 @@ public class test {
         Date date=new Date(System.currentTimeMillis());
         timeline.setTime(date);
         timelineDao.add(timeline);
+        redisDao.getSetTid(timeline.getUserid());
         return "main";
     }
 
@@ -87,9 +86,29 @@ public class test {
     @RequestMapping(value = "/cs",method = RequestMethod.GET)
     @ResponseBody
     public  String cs(){
-      List<Timeline> list= timelineDao.selectByUserID(123);
+//      List<Timeline> list= timelineDao.selectByUserID(123);
 
-        return list.get(4).getFile();
+//        return list.get(4).getFile();
+      Timeline timeline= timelineDao.selectById(11);
+        return timeline.getText();
+    }
+    @Autowired
+    RedisDao redisDao;
+    @RequestMapping(value = "/selectbytime",method = RequestMethod.GET)
+    @ResponseBody
+    public String s1(){
+        redisDao.getSetTid(123);
+        return "";
+
+    }
+    @RequestMapping("testy")
+    public String string(){
+       List<Timeline> list= mapper.selectByUserID(123);
+       for (Timeline timeline:list){
+           System.out.println(timeline.getId()+"    "+timeline.getTime().getTime());
+           redisDao.addUserTimeline(123,timeline);
+       }
+        return "main";
     }
 
 }

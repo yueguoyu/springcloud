@@ -11,8 +11,8 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import java.util.concurrent.*;
 
 
-@Configuration
-@EnableScheduling
+//@Configuration
+//@EnableScheduling
 public class ConfigureTasks implements SchedulingConfigurer {
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {

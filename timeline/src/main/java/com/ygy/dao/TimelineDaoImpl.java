@@ -35,6 +35,7 @@ public class TimelineDaoImpl implements TimelineDao {
     @Transient
     public void add(Timeline timeline) {
         redisDao.addTimeline(timeline.getId(), timeline);
+        redisDao.addUserTimeline(timeline.getUserid(),timeline);
     }
 
     /**
@@ -42,7 +43,7 @@ public class TimelineDaoImpl implements TimelineDao {
      */
     @Override
     @Scheduled(cron = "0 0 0 * * ?")
-//    @Scheduled(cron = "0/10 * * * * ?") 10秒执行一次
+//    @Scheduled(cron = "0/10 * * * * ?")// 10秒执行一次
     public void addToMysql() {
         List<Map<String, Object>> mapList = redisDao.getTimelines();
         Timeline timeline;
@@ -68,22 +69,20 @@ public class TimelineDaoImpl implements TimelineDao {
     @Transient
     @Override
     public Timeline selectById(long tid) {
-        ValueOperations<Long, Timeline> operations = redisTemplate.opsForValue();
-        boolean haskey = redisTemplate.hasKey(tid);
-        if (haskey) {
-            Timeline timeline = operations.get(tid);
-            return timeline;
+        Timeline  timeline=null;
+        try {
+            timeline = redisDao.getTimelineByID(tid);
+        }catch (Exception e){
+            timeline=mapper.selectByPrimaryKey(tid);
+            redisDao.addTimeline(tid,timeline);
         }
-        Timeline timeline = mapper.selectByPrimaryKey(tid);
-        operations.set(tid, timeline, 60, TimeUnit.MINUTES);
         return timeline;
     }
 
-    //缓存有问题
+    //获取当前时间前8小时的所有动态
     @Override
     public List<Timeline> selectByTime(Date date) {
-
-
+//      return redisDao.getTimelinesByTime(123);
         return mapper.selectByTime();
     }
 
