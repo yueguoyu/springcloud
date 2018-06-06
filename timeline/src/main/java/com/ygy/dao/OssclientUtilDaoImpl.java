@@ -3,9 +3,7 @@ package com.ygy.dao;
 
 import com.aliyun.oss.HttpMethod;
 import com.aliyun.oss.OSSClient;
-import com.aliyun.oss.model.CannedAccessControlList;
-import com.aliyun.oss.model.CreateBucketRequest;
-import com.aliyun.oss.model.GeneratePresignedUrlRequest;
+import com.aliyun.oss.model.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +20,7 @@ public class OssclientUtilDaoImpl implements OssclientUtilDao {
     String endpoint = "http://oss-cn-beijing.aliyuncs.com";
     String accessKeyId = "LTAIzgt7dyOScADr";
     String accessKeySecret = "Wd8HRZaMAIJ29vKBZ2YYFCPv0a5cW5";
+
     @Override
     public void uplod(String key, MultipartFile file) {
         OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
@@ -51,9 +50,11 @@ public class OssclientUtilDaoImpl implements OssclientUtilDao {
         URL url = null;
 //        ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
         Date expiration = new Date(System.currentTimeMillis() + 3600 * 1000);
-        found = ossClient.doesObjectExist("yueguoyu",  key);
+        found = ossClient.doesObjectExist("yueguoyu", key);
         if (found) {
-            url = ossClient.generatePresignedUrl("yueguoyu",  key, expiration);
+            SimplifiedObjectMeta metadata = ossClient.getSimplifiedObjectMeta("yueguoyu", key);
+            metadata.getETag();
+            url = ossClient.generatePresignedUrl("yueguoyu", key, expiration);
         } else {
             return "sorry";
         }
@@ -103,4 +104,32 @@ public class OssclientUtilDaoImpl implements OssclientUtilDao {
         return url.getFile();
     }
 
+    @Override
+    public String getSimpleUrl(String username, MultipartFile file) {
+        String url = username + "/image/" + file.getOriginalFilename();
+        return url;
+    }
+
+    @Override
+    public void fileUplod(String filename, String str, String key) {
+        OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+        byte[] a = str.getBytes();
+        File file = new File(filename);
+        try {
+            FileOutputStream outputStream = new FileOutputStream(file);
+            outputStream.write(a);
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            ossClient.putObject("yueguoyu", key, file);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            file.delete();
+            ossClient.shutdown();
+        }
+
+    }
 }

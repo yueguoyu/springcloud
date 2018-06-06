@@ -65,7 +65,6 @@ public class Timeline {
      * This method returns the value of the database column timeline.id
      *
      * @return the value of timeline.id
-     *
      * @mbggenerated Wed May 16 17:01:30 CST 2018
      */
     public Long getId() {
@@ -77,7 +76,6 @@ public class Timeline {
      * This method sets the value of the database column timeline.id
      *
      * @param id the value for timeline.id
-     *
      * @mbggenerated Wed May 16 17:01:30 CST 2018
      */
     public void setId(Long id) {
@@ -89,7 +87,6 @@ public class Timeline {
      * This method returns the value of the database column timeline.userid
      *
      * @return the value of timeline.userid
-     *
      * @mbggenerated Wed May 16 17:01:30 CST 2018
      */
     public Long getUserid() {
@@ -101,7 +98,6 @@ public class Timeline {
      * This method sets the value of the database column timeline.userid
      *
      * @param userid the value for timeline.userid
-     *
      * @mbggenerated Wed May 16 17:01:30 CST 2018
      */
     public void setUserid(Long userid) {
@@ -113,7 +109,6 @@ public class Timeline {
      * This method returns the value of the database column timeline.text
      *
      * @return the value of timeline.text
-     *
      * @mbggenerated Wed May 16 17:01:30 CST 2018
      */
     public String getText() {
@@ -125,7 +120,6 @@ public class Timeline {
      * This method sets the value of the database column timeline.text
      *
      * @param text the value for timeline.text
-     *
      * @mbggenerated Wed May 16 17:01:30 CST 2018
      */
     public void setText(String text) {
@@ -137,7 +131,6 @@ public class Timeline {
      * This method returns the value of the database column timeline.file
      *
      * @return the value of timeline.file
-     *
      * @mbggenerated Wed May 16 17:01:30 CST 2018
      */
     public String getFile() {
@@ -149,7 +142,6 @@ public class Timeline {
      * This method sets the value of the database column timeline.file
      *
      * @param file the value for timeline.file
-     *
      * @mbggenerated Wed May 16 17:01:30 CST 2018
      */
     public void setFile(String file) {
@@ -161,7 +153,6 @@ public class Timeline {
      * This method returns the value of the database column timeline.thumbsup
      *
      * @return the value of timeline.thumbsup
-     *
      * @mbggenerated Wed May 16 17:01:30 CST 2018
      */
     public Integer getThumbsup() {
@@ -173,7 +164,6 @@ public class Timeline {
      * This method sets the value of the database column timeline.thumbsup
      *
      * @param thumbsup the value for timeline.thumbsup
-     *
      * @mbggenerated Wed May 16 17:01:30 CST 2018
      */
     public void setThumbsup(Integer thumbsup) {
@@ -185,7 +175,6 @@ public class Timeline {
      * This method returns the value of the database column timeline.time
      *
      * @return the value of timeline.time
-     *
      * @mbggenerated Wed May 16 17:01:30 CST 2018
      */
     public Date getTime() {
@@ -197,7 +186,6 @@ public class Timeline {
      * This method sets the value of the database column timeline.time
      *
      * @param time the value for timeline.time
-     *
      * @mbggenerated Wed May 16 17:01:30 CST 2018
      */
     public void setTime(Date time) {

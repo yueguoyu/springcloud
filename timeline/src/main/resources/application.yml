@@ -6,7 +6,7 @@ server:
   port: 8763
 spring:
   application:
-    name: service1
+    name: service-feign
   datasource:
     url: jdbc:mysql://localhost/springcloud?characterEncoding=utf-8
     username: root
@@ -33,3 +33,10 @@ mybatis:
   mapper-locations: classpath:mapping/*.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+feign:
+  compression:
+    request:
+      min-request-size: 2048
+      mime-types: text/xml,application/xml,application/json
+  httpclient:
+      enabled=true

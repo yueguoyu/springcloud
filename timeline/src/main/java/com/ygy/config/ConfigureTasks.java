@@ -1,7 +1,6 @@
 package com.ygy.config;
 
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -18,6 +17,7 @@ public class ConfigureTasks implements SchedulingConfigurer {
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
         taskRegistrar.setScheduler(taskRegistrar);
     }
+
     @Bean(destroyMethod = "shutdown")
     public Executor taskExecutor() {
         return Executors.newScheduledThreadPool(100);

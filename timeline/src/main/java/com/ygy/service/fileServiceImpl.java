@@ -14,9 +14,10 @@ import java.io.FileOutputStream;
 public class fileServiceImpl implements fileService {
     @Autowired
     OssclientUtilDao ossclientUtilDao;
+
     @Override
-    public void updateFileDao(MultipartFile file){
-       ossclientUtilDao.uplod(file.getOriginalFilename(),file);
+    public void updateFileDao(MultipartFile file) {
+        ossclientUtilDao.uplod(file.getOriginalFilename(), file);
     }
 
 }

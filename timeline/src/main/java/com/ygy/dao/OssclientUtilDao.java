@@ -16,11 +16,21 @@ public interface OssclientUtilDao {
     void uplod(String key, MultipartFile file);
 
     /**
+     * 有时间权限的图片文件返回url
+     *
      * @param
      * @param
      * @return
      */
     String getUrl(String key);
+
+    /**
+     * 获得没有时间权限图片
+     *
+     * @param file
+     * @return
+     */
+    String getSimpleUrl(String username, MultipartFile file);
 
     /**
      * @param bucketName
@@ -38,4 +48,9 @@ public interface OssclientUtilDao {
      * @return
      */
     String getSignedUrl(String key);
+
+    /**
+     * @param str
+     */
+    void fileUplod(String filename, String str, String key);
 }

@@ -18,7 +18,7 @@
 
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.ygy.mapper" targetProject="src"/>
 
-        <table tableName="timeline"/>
+        <table tableName="usertimeline"/>
 
 
     </context>

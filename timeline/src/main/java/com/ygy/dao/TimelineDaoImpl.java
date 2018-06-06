@@ -1,7 +1,9 @@
 package com.ygy.dao;
 
 import com.ygy.mapper.TimelineMapper;
+import com.ygy.mapper.UsertimelineMapper;
 import com.ygy.model.Timeline;
+import com.ygy.model.Usertimeline;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -11,10 +13,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.beans.Transient;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -30,12 +29,14 @@ public class TimelineDaoImpl implements TimelineDao {
     RedisTemplate redisTemplate;
     @Autowired
     RedisDaoImpl redisDao;
+    @Autowired
+    UsertimelineMapper usertimelineMapper;
 
     @Override
     @Transient
     public void add(Timeline timeline) {
         redisDao.addTimeline(timeline.getId(), timeline);
-        redisDao.addUserTimeline(timeline.getUserid(),timeline);
+        redisDao.addUserTimeline(timeline.getUserid(), timeline);
     }
 
     /**
@@ -47,6 +48,7 @@ public class TimelineDaoImpl implements TimelineDao {
     public void addToMysql() {
         List<Map<String, Object>> mapList = redisDao.getTimelines();
         Timeline timeline;
+        Usertimeline usertimeline = new Usertimeline();
         for (Map map : mapList) {
             timeline = new Timeline();
             timeline.setUserid((Long) map.get("uid"));
@@ -55,8 +57,25 @@ public class TimelineDaoImpl implements TimelineDao {
             timeline.setFile((String) map.get("file"));
             timeline.setTime((Date) map.get("posted"));
             timeline.setThumbsup((Integer) map.get("thumbsup"));
-            mapper.insert(timeline);
+
+            //使用给的tid
+            timeline.setId((Long) map.get("tid"));
+            usertimeline.setUserid("time_" + map.get("uid"));
+            usertimeline.setTime((Date) map.get("posted"));
+            usertimeline.setTid((Long) map.get("tid"));
+            try {
+                mapper.insert(timeline);
+            } catch (Exception e) {
+                break;
+            }
+            try {
+                usertimelineMapper.insert(usertimeline);
+            } catch (Exception e) {
+                break;
+            }
+
         }
+
     }
 
     @Transient
@@ -69,12 +88,12 @@ public class TimelineDaoImpl implements TimelineDao {
     @Transient
     @Override
     public Timeline selectById(long tid) {
-        Timeline  timeline=null;
+        Timeline timeline = null;
         try {
             timeline = redisDao.getTimelineByID(tid);
-        }catch (Exception e){
-            timeline=mapper.selectByPrimaryKey(tid);
-            redisDao.addTimeline(tid,timeline);
+        } catch (Exception e) {
+            timeline = mapper.selectByPrimaryKey(tid);
+            redisDao.addTimeline(tid, timeline);
         }
         return timeline;
     }
@@ -88,6 +107,21 @@ public class TimelineDaoImpl implements TimelineDao {
 
     @Override
     public List<Timeline> selectByUserID(long userid) {
-        return mapper.selectByUserID(userid);
+        List<Timeline> list = new ArrayList<>();
+        Set<Long> set = null;
+        try {
+            set = redisDao.getSetTid(userid);
+            for (long tid : set) {
+                Timeline timeline = redisDao.getTimelineByID(tid);
+                list.add(timeline);
+            }
+        } catch (Exception e) {
+            list = mapper.selectByUserID(userid);
+            for (Timeline timeline : list) {
+                redisDao.addTimeline(timeline.getId(), timeline);
+                redisDao.addUserTimeline(timeline.getUserid(), timeline);
+            }
+        }
+        return list;
     }
 }

@@ -6,9 +6,9 @@ public class PvoidFile {
     @NotNull(message = "不能为空")
     private long id;
     @NotNull(message = "不能为空")
-    private  String name;
+    private String name;
     @NotNull(message = "不能为空")
-    private   String url;
+    private String url;
 
     public long getId() {
         return id;

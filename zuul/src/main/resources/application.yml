@@ -7,6 +7,17 @@ server:
 spring:
   application:
     name: service-zuul
+  redis:
+           database: 1
+           host: 127.0.0.1
+           port: 6379
+           password:
+           pool:
+             max-active: 8
+             max-wait: -1
+             max-idle: 8
+             min-idle: 0
+           timeout: 600000
 zuul:
   routes:
       api-a:
@@ -22,4 +33,5 @@ hystrix:
         isolation:
           thread:
             timeoutInMilliseconds: 60000
+debug: true
 

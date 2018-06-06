@@ -2,6 +2,7 @@ package com.ygy.dao;
 
 
 import com.ygy.mapper.TimelineMapper;
+import com.ygy.mapper.UsertimelineMapper;
 import com.ygy.model.Timeline;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
@@ -14,12 +15,15 @@ import java.util.*;
 @Service
 public class RedisDaoImpl implements RedisDao {
     @Autowired
-    RedisTemplate redisTemplate;
+    private RedisTemplate redisTemplate;
     @Autowired
-    TimelineMapper mapper;
+    private TimelineMapper mapper;
+    @Autowired
+    private UsertimelineMapper usertimelineMapper;
 
     static HashOperations<Long, String, Object> useroperations;
-    static ZSetOperations<String, Long> zSetOperations;;
+    static ZSetOperations<String, Long> zSetOperations;
+    ;
     static ArrayList<Long> arrayList = new ArrayList<>();
 
     @Override
@@ -32,6 +36,7 @@ public class RedisDaoImpl implements RedisDao {
         useroperations.put(tid, "uid", timeline.getUserid());
         useroperations.put(tid, "username", timeline.getUsername());
         useroperations.put(tid, "thumbsup", timeline.getThumbsup());
+        useroperations.put(tid, "tid", tid);
         arrayList.add(tid);
     }
 
@@ -50,8 +55,8 @@ public class RedisDaoImpl implements RedisDao {
     }
 
     @Override
-    public Timeline getTimelineByID(Long id) {
-        Map<String, Object> map = useroperations.entries(id);
+    public Timeline getTimelineByID(Long tid) {
+        Map<String, Object> map = useroperations.entries(tid);
         Timeline timeline = new Timeline();
         timeline.setUserid((Long) map.get("uid"));
         timeline.setUsername((String) map.get("username"));
@@ -59,50 +64,23 @@ public class RedisDaoImpl implements RedisDao {
         timeline.setFile((String) map.get("file"));
         timeline.setTime((Date) map.get("posted"));
         timeline.setThumbsup((Integer) map.get("thumbsup"));
-        timeline.setId(id);
+        timeline.setId(tid);
         return timeline;
     }
 
     @Override
     public void addUserTimeline(long uid, Timeline timeline) {
-        String key = "timelineUid" + uid;
+        String key = "time_" + uid;
         zSetOperations = redisTemplate.opsForZSet();
-//        zSetOperations.add(key,(long)12,12);
         zSetOperations.add(key, timeline.getId(), timeline.getTime().getTime());
     }
 
+    //获取指定用户的时间线
     @Override
-    public List<Timeline> getTimelinesByTime(long uid) {
-        zSetOperations = redisTemplate.opsForZSet();
+    public Set<Long> getSetTid(long uid) {
         String key = "time_" + uid;
-        Date date=new Date(System.currentTimeMillis());
-        Set<Long> set = zSetOperations.reverseRange(key, date.getTime()-1000000000, date.getTime());
-        List<Timeline> list = new ArrayList<>();
-        for (long tid : set) {
-            Timeline timeline = null;
-            try {
-                timeline = getTimelineByID(tid);
-                System.out.println(tid);
-            } catch (Exception e) {
-                timeline = mapper.selectByPrimaryKey(tid);
-                this.addTimeline(tid, timeline);
-
-            } finally {
-                list.add(timeline);
-                System.out.println(tid);
-            }
-        }
-        return list;
-    }
-    //再改改
-    @Override
-    public void getSetTid(long uid) {
-        String key = "time_" + 123;
-        Set<Long> set=new HashSet<>();
-            set = zSetOperations.range(key, 0, System.currentTimeMillis());
-        long re=0;
-        for (long a:set){
-            System.out.println("    "+a);
-        }
+        Set<Long> set = new HashSet<>();
+        set = zSetOperations.reverseRange(key, 0, System.currentTimeMillis());
+        return set;
     }
 }
