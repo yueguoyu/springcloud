@@ -19,8 +19,8 @@ import org.springframework.stereotype.Service;
 public class AlyunDaoImpl implements AlyunDao {
     final String product = "Dysmsapi";
     final String domain = "dysmsapi.aliyuncs.com";
-    final String accessKeyId = "LTAIdUI0qiYslH2m";
-    final String accessKeySecret = "6biAmbqmS1bkEbjOAcVCXT1R61xRic";
+    final String accessKeyId = "";
+    final String accessKeySecret = "";
     @Override
     public boolean message(String number) throws Exception {
         //设置超时时间-可自行调整
