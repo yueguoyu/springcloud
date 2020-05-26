@@ -18,8 +18,8 @@ import java.util.Date;
 @Component
 public class OssclientUtilDaoImpl implements OssclientUtilDao {
     String endpoint = "http://oss-cn-beijing.aliyuncs.com";
-    String accessKeyId = "LTAIzgt7dyOScADr";
-    String accessKeySecret = "Wd8HRZaMAIJ29vKBZ2YYFCPv0a5cW5";
+    String accessKeyId = "";
+    String accessKeySecret = "";
 
     @Override
     public void uplod(String key, MultipartFile file) {
